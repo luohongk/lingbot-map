@@ -20,7 +20,7 @@ Robbyant Team
 
 https://github.com/user-attachments/assets/fe39e095-af2c-4ec9-b68d-a8ba97e505ab
 
------
+---
 
 ### 🗺️ Meet LingBot-Map! We've built a feed-forward 3D foundation model for streaming 3D reconstruction! 🏗️🌍
 
@@ -29,6 +29,8 @@ LingBot-Map has focused on:
 - **Geometric Context Transformer**: Architecturally unifies coordinate grounding, dense geometric cues, and long-range drift correction within a single streaming framework through anchor context, pose-reference window, and trajectory memory.
 - **High-Efficiency Streaming Inference**: A feed-forward architecture with paged KV cache attention, enabling stable inference at ~20 FPS on 518×378 resolution over long sequences exceeding 10,000 frames.
 - **State-of-the-Art Reconstruction**: Superior performance on diverse benchmarks compared to both existing streaming and iterative optimization-based approaches.
+
+
 
 ---
 
@@ -77,10 +79,10 @@ pip install -e ".[vis]"
 
 # 📦 Model Download
 
-| Model Name | Huggingface Repository | ModelScope Repository | Description |
-| :--- | :--- | :--- | :--- |
-| lingbot-map-long | [robbyant/lingbot-map](https://huggingface.co/robbyant/lingbot-map) | [Robbyant/lingbot-map](https://www.modelscope.cn/models/Robbyant/lingbot-map) | Better suited for long sequences and large scale scenes (Recommend). |
-| lingbot-map | [robbyant/lingbot-map](https://huggingface.co/robbyant/lingbot-map) | [Robbyant/lingbot-map](https://www.modelscope.cn/models/Robbyant/lingbot-map) | Balanced checkpoint — trade off all-around performance across short and long sequences. |
+| Model Name         | Huggingface Repository                                           | ModelScope Repository                                                      | Description                                                                                                  |
+| :----------------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |
+| lingbot-map-long   | [robbyant/lingbot-map](https://huggingface.co/robbyant/lingbot-map) | [Robbyant/lingbot-map](https://www.modelscope.cn/models/Robbyant/lingbot-map) | Better suited for long sequences and large scale scenes (Recommend).                                         |
+| lingbot-map        | [robbyant/lingbot-map](https://huggingface.co/robbyant/lingbot-map) | [Robbyant/lingbot-map](https://www.modelscope.cn/models/Robbyant/lingbot-map) | Balanced checkpoint — trade off all-around performance across short and long sequences.                     |
 | lingbot-map-stage1 | [robbyant/lingbot-map](https://huggingface.co/robbyant/lingbot-map) | [Robbyant/lingbot-map](https://www.modelscope.cn/models/Robbyant/lingbot-map) | Stage-1 training checkpoint of lingbot-map — can be loaded into the VGGT model for bidirectional inference. |
 
 > 🚧 **Coming soon:** we're training an stronger model that supports longer sequences — stay tuned.
@@ -92,19 +94,14 @@ Run `demo.py` for interactive 3D visualization via a browser-based [viser](https
 ### Try the Example Scenes
 
 We provide four example scenes in `example/` that you can run out of the box:
+
 ```bash
 # Church scene
 python demo.py --model_path /path/to/lingbot-map-long.pt \
     --image_folder example/church --mask_sky
 ```
 
-
 https://github.com/user-attachments/assets/aa10f7ab-8024-43c7-92f8-d56159ec85c8
-
-
-
-
-
 
 ```bash
 # University scene
@@ -112,14 +109,7 @@ python demo.py --model_path /path/to/lingbot-map-long.pt \
     --image_folder example/university --mask_sky
 ```
 
-
 https://github.com/user-attachments/assets/212a1744-6ff5-4ccf-9bd4-728608248b57
-
-
-
-
-
-
 
 ```bash
 # Loop scene (loop closure trajectory)
@@ -127,12 +117,7 @@ python demo.py --model_path /path/to/lingbot-map-long.pt \
     --image_folder example/loop
 ```
 
-
 https://github.com/user-attachments/assets/5ae0a292-b081-40c6-838c-b7c1a0538d75
-
-
-
-
 
 ```bash
 # Oxford scene with sky masking (outdoor, large scale scene)
@@ -140,15 +125,10 @@ python demo.py --model_path /path/to/lingbot-map-long.pt \
     --image_folder example/oxford --mask_sky
 ```
 
-
 https://github.com/user-attachments/assets/6b8daa95-9ed4-40b2-9902-7435779b886d
 
-
-
-
-
-
 We will provide more examples in the follow-up.
+
 ### Streaming with Keyframe Interval
 
 Use `--keyframe_interval` to reduce KV cache memory by only keeping every N-th frame as a keyframe. Non-keyframe frames still produce predictions but are not stored in the cache. This is useful for long sequences which exceed 320 frames (We train with video RoPE on 320 views, so performance degrades when the KV cache stores more than 320 views. Using a keyframe strategy allows inference over longer sequences.).
@@ -166,13 +146,7 @@ python demo.py \
     --keyframe_interval 2
 ```
 
-
 https://github.com/user-attachments/assets/d350b590-d036-4363-af8c-7af3918338ef
-
-
-
-
-
 
 ### Windowed Inference (for long sequences, >3000 frames)
 
@@ -181,7 +155,6 @@ python demo.py --model_path /path/to/lingbot-map-long.pt \
     --video_path video.mp4 --fps 10 \
     --mode windowed --window_size 128
 ```
-
 
 ### Sky Masking
 
@@ -216,12 +189,12 @@ python demo.py --model_path /path/to/checkpoint.pt \
 
 ### Visualization Options
 
-| Argument | Default | Description |
-|:---|:---|:---|
-| `--port` | `8080` | Viser viewer port |
-| `--conf_threshold` | `1.5` | Visibility threshold for filtering low-confidence points |
-| `--point_size` | `0.00001` | Point cloud point size |
-| `--downsample_factor` | `10` | Spatial downsampling for point cloud display |
+| Argument                | Default     | Description                                              |
+| :---------------------- | :---------- | :------------------------------------------------------- |
+| `--port`              | `8080`    | Viser viewer port                                        |
+| `--conf_threshold`    | `1.5`     | Visibility threshold for filtering low-confidence points |
+| `--point_size`        | `0.00001` | Point cloud point size                                   |
+| `--downsample_factor` | `10`      | Spatial downsampling for point cloud display             |
 
 ### Without FlashInfer (SDPA fallback)
 
